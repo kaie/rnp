@@ -43,6 +43,14 @@ typedef bool                        pgp_destination_func_t(pgp_parse_handler_t *
 typedef bool pgp_source_func_t(pgp_parse_handler_t *handler, pgp_source_t *src);
 typedef void pgp_signatures_func_t(pgp_signature_info_t *sigs, int count, void *param);
 
+typedef struct pgp_parse_result_t {
+  bool has_mdc;
+  bool has_valid_mdc;
+  bool has_aead;
+  bool has_valid_aead;
+  bool was_encrypted;
+} pgp_parse_result_t;
+
 /* handler used to return needed information during pgp source processing */
 typedef struct pgp_parse_handler_t {
     pgp_password_provider_t *password_provider; /* if NULL then default will be used */
@@ -56,6 +64,7 @@ typedef struct pgp_parse_handler_t {
 
     rnp_ctx_t *ctx;   /* operation context */
     void *     param; /* additional parameters */
+    pgp_parse_result_t result_flags;
 } pgp_parse_handler_t;
 
 /* @brief Process the OpenPGP source: file, memory, stdin

@@ -132,6 +132,7 @@ struct rnp_op_verify_st {
     size_t                    signature_count;
     char *                    filename;
     uint32_t                  file_mtime;
+    pgp_parse_result_t        result_flags;
 };
 
 struct rnp_op_encrypt_st {

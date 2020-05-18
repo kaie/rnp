@@ -2714,6 +2714,7 @@ rnp_op_verify_execute(rnp_op_verify_t op)
     handler.ctx = &op->rnpctx;
 
     rnp_result_t ret = process_pgp_source(&handler, &op->input->src);
+    op->result_flags = handler.result_flags;
     if (op->output) {
         dst_flush(&op->output->dst);
         op->output->keep = ret == RNP_SUCCESS;
@@ -2743,6 +2744,29 @@ rnp_op_verify_get_signature_at(rnp_op_verify_t op, size_t idx, rnp_op_verify_sig
         return RNP_ERROR_BAD_PARAMETERS;
     }
     *sig = &op->signatures[idx];
+    return RNP_SUCCESS;
+}
+
+rnp_result_t
+rnp_op_verify_get_mdc_info(rnp_op_verify_t op, bool *has_mdc, bool *has_valid_mdc)
+{
+    *has_mdc = op->result_flags.has_mdc;
+    *has_valid_mdc = op->result_flags.has_valid_mdc;
+    return RNP_SUCCESS;
+}
+
+rnp_result_t
+rnp_op_verify_get_aead_info(rnp_op_verify_t op, bool *has_aead, bool *has_valid_aead)
+{
+    *has_aead = op->result_flags.has_aead;
+    *has_valid_aead = op->result_flags.has_valid_aead;
+    return RNP_SUCCESS;
+}
+
+rnp_result_t
+rnp_op_verify_get_encryption_info(rnp_op_verify_t op, bool *was_encrypted)
+{
+    *was_encrypted = op->result_flags.was_encrypted;
     return RNP_SUCCESS;
 }
 

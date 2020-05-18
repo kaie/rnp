@@ -241,11 +241,11 @@ src_skip(pgp_source_t *src, size_t len)
 }
 
 rnp_result_t
-src_finish(pgp_source_t *src)
+src_finish(pgp_source_t *src, pgp_parse_result_t *result_flags)
 {
     rnp_result_t res = RNP_SUCCESS;
     if (src->finish) {
-        res = src->finish(src);
+        res = src->finish(src, result_flags);
     }
 
     return res;

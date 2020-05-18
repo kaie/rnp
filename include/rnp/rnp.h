@@ -1637,6 +1637,12 @@ rnp_result_t rnp_op_verify_get_signature_at(rnp_op_verify_t            op,
  */
 rnp_result_t rnp_op_verify_get_file_info(rnp_op_verify_t op, char **filename, uint32_t *mtime);
 
+rnp_result_t rnp_op_verify_get_mdc_info(rnp_op_verify_t op, bool *has_mdc, bool *has_valid_mdc);
+
+rnp_result_t rnp_op_verify_get_aead_info(rnp_op_verify_t op, bool *has_aead, bool *has_valid_aead);
+
+rnp_result_t rnp_op_verify_get_encryption_info(rnp_op_verify_t op, bool *was_encrypted);
+
 /** @brief Free resources allocated in verification context.
  *  @param op opaque verification context. Must be initialized.
  *  @return RNP_SUCCESS if call succeeded.

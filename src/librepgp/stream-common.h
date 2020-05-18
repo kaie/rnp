@@ -54,9 +54,10 @@ typedef enum {
 
 typedef struct pgp_source_t pgp_source_t;
 typedef struct pgp_dest_t   pgp_dest_t;
+typedef struct pgp_parse_result_t pgp_parse_result_t;
 
 typedef bool pgp_source_read_func_t(pgp_source_t *src, void *buf, size_t len, size_t *read);
-typedef rnp_result_t pgp_source_finish_func_t(pgp_source_t *src);
+typedef rnp_result_t pgp_source_finish_func_t(pgp_source_t *src, pgp_parse_result_t *result_flags);
 typedef void         pgp_source_close_func_t(pgp_source_t *src);
 
 typedef rnp_result_t pgp_dest_write_func_t(pgp_dest_t *dst, const void *buf, size_t len);
@@ -144,7 +145,7 @@ void src_skip(pgp_source_t *src, size_t len);
  *  @return RNP_SUCCESS or error code. If source doesn't have finish handler then also
  * RNP_SUCCESS is returned
  */
-rnp_result_t src_finish(pgp_source_t *src);
+rnp_result_t src_finish(pgp_source_t *src, pgp_parse_result_t *result_flags);
 
 /** @brief check whether there were reading error on source
  *  @param allocated and initialized source structure

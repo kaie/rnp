@@ -682,21 +682,33 @@ encrypted_src_read_cfb(pgp_source_t *src, void *buf, size_t len, size_t *readres
 }
 
 static rnp_result_t
-encrypted_src_finish(pgp_source_t *src)
+encrypted_src_finish(pgp_source_t *src, pgp_parse_result_t *result_flags)
 {
     pgp_source_encrypted_param_t *param = (pgp_source_encrypted_param_t *) src->param;
+    
+    result_flags->was_encrypted = true;
+    result_flags->has_mdc = false;
+    result_flags->has_valid_mdc = false;
+    result_flags->has_aead = false;
+    result_flags->has_valid_aead = false;
 
     if (param->aead) {
+        result_flags->has_aead = true;
         if (!param->aead_validated) {
             RNP_LOG("aead last chunk was not validated");
             return RNP_ERROR_BAD_STATE;
         }
+        result_flags->has_valid_aead = true;
         return RNP_SUCCESS;
     }
 
-    if (param->has_mdc && !param->mdc_validated) {
+    if (param->has_mdc) {
+      result_flags->has_mdc = true;
+      if (!param->mdc_validated) {
         RNP_LOG("mdc was not validated");
         return RNP_ERROR_BAD_STATE;
+      }
+      result_flags->has_valid_mdc = true;
     }
 
     return RNP_SUCCESS;
@@ -879,7 +891,7 @@ signed_read_signatures(pgp_source_t *src)
 }
 
 static rnp_result_t
-signed_src_finish(pgp_source_t *src)
+signed_src_finish(pgp_source_t *src, pgp_parse_result_t *result_flags)
 {
     pgp_source_signed_param_t *param = (pgp_source_signed_param_t *) src->param;
     pgp_signature_info_t *     sinfo = NULL;
@@ -2348,7 +2360,7 @@ process_pgp_source(pgp_parse_handler_t *handler, pgp_source_t *src)
     /* finalizing the input. Signatures are checked on this step */
     if (res == RNP_SUCCESS) {
         for (list_item *src = list_back(ctx.sources); src; src = list_prev(src)) {
-            fres = src_finish((pgp_source_t *) src);
+            fres = src_finish((pgp_source_t *) src, &handler->result_flags);
             if (fres) {
                 res = fres;
             }
