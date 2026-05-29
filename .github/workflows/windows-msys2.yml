@@ -27,36 +27,6 @@ name: windows-msys2
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-      - 'release/**'
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - 'version.txt'
-      - '.github/workflows/*.yml'
-      - '!.github/workflows/windows-msys2.yml'
-  pull_request:
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - 'version.txt'
-  workflow_dispatch:
 
 concurrency:
   group: '${{ github.workflow }}-${{ github.job }}-${{ github.head_ref || github.ref_name }}'

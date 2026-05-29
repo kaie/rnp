@@ -26,33 +26,6 @@
 name: ubuntu
 
 on:
-  push:
-    branches:
-      - main
-      - 'release/**'
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - '.github/workflows/*.yml'
-      - '!.github/workflows/ubuntu.yml'
-  pull_request:
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
   workflow_dispatch:
 
 concurrency:

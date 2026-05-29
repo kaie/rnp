@@ -1,34 +1,5 @@
 name: centos-and-fedora
 on:
-  push:
-    branches:
-      - main
-      - 'release/**'
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - 'version.txt'
-      - '.github/workflows/*.yml'
-      - '!.github/workflows/centos-and-fedora.yml'
-  pull_request:
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - 'version.txt'
   workflow_dispatch:
 
 concurrency:

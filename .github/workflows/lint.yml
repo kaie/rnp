@@ -1,20 +1,6 @@
 name: lint
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    paths-ignore:
-      - '/.*'
-      - '/_*'
-      - '!.clang-format'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
   workflow_dispatch:
 
 jobs:

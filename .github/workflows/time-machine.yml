@@ -24,36 +24,6 @@
 
 name: time-machine
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - 'version.txt'
-      - '.github/workflows/*.yml'
-      - '!.github/workflows/time-machine.yml'
-  pull_request:
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - 'version.txt'
-      - '.github/workflows/*.yml'
-      - '!.github/workflows/time-machine.yml'
   workflow_dispatch:
 
 concurrency:

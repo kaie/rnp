@@ -1,29 +1,7 @@
 name: nix
 
 on:
-  push:
-    branches:
-      - main
-      - 'release/**'
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - 'ci/**'
-      - '.github/workflows/*.yml'
-      - '!.github/workflows/nix.yml'
-  pull_request:
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - 'ci/**'
+  workflow_dispatch:
 
 jobs:
   build:
