@@ -26,7 +26,33 @@
 name: ubuntu
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'release/**'
+    paths-ignore:
+      - '/*.sh'
+      - '/.*'
+      - '/_*'
+      - 'Brewfile'
+      - 'docs/**'
+      - '**.adoc'
+      - '**.md'
+      - '**.nix'
+      - 'flake.lock'
+      - '.github/workflows/*.yml'
+      - '!.github/workflows/ubuntu.yml'
+  pull_request:
+    paths-ignore:
+      - '/*.sh'
+      - '/.*'
+      - '/_*'
+      - 'Brewfile'
+      - 'docs/**'
+      - '**.adoc'
+      - '**.md'
+      - '**.nix'
+      - 'flake.lock'
 
 concurrency:
   group: '${{ github.workflow }}-${{ github.job }}-${{ github.head_ref || github.ref_name }}'
@@ -91,7 +117,7 @@ jobs:
           mkdir -p "build/Testing/Temporary"
           cp "cmake/CTestCostData.txt" "build/Testing/Temporary"
           export PATH="$PWD/build/src/lib:$PATH"
-          ctest --parallel 1 --test-dir build --output-on-failure
+          ctest --parallel ${{ env.CORES }} --test-dir build --output-on-failure
 
   cmake-offline-googletest-src:
     runs-on: ubuntu-latest
@@ -126,7 +152,7 @@ jobs:
           mkdir -p "build/Testing/Temporary"
           cp "cmake/CTestCostData.txt" "build/Testing/Temporary"
           export PATH="$PWD/build/src/lib:$PATH"
-          ctest --parallel 1 --test-dir build --output-on-failure
+          ctest --parallel ${{ env.CORES }} --test-dir build --output-on-failure
 
       - name: Check googletest
         run: |
@@ -172,7 +198,7 @@ jobs:
           mkdir -p "build/Testing/Temporary"
           cp "cmake/CTestCostData.txt" "build/Testing/Temporary"
           export PATH="$PWD/build/src/lib:$PATH"
-          ctest --parallel 1 --test-dir build --output-on-failure
+          ctest --parallel ${{ env.CORES }} --test-dir build --output-on-failure
 
       - name: Check googletest
         run: |
@@ -244,7 +270,7 @@ jobs:
           mkdir -p "build/Testing/Temporary"
           cp "cmake/CTestCostData.txt" "build/Testing/Temporary"
           export PATH="$PWD/build/src/lib:$PATH"
-          ctest --parallel 1 --test-dir build -R rnp_tests --output-on-failure
+          ctest --parallel ${{ env.CORES }} --test-dir build -R rnp_tests --output-on-failure
 
   package-source:
     runs-on: ubuntu-latest
