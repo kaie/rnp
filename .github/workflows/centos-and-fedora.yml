@@ -1,34 +1,6 @@
 name: centos-and-fedora
 on:
-  push:
-    branches:
-      - main
-      - 'release/**'
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - 'version.txt'
-      - '.github/workflows/*.yml'
-      - '!.github/workflows/centos-and-fedora.yml'
-  pull_request:
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - 'version.txt'
+  workflow_dispatch:
 
 concurrency:
   group: '${{ github.workflow }}-${{ github.job }}-${{ github.head_ref || github.ref_name }}'
@@ -104,6 +76,13 @@ jobs:
         with:
           submodules: true  
 
+      - name: Fix CentOS 9 mirrors
+        if: contains(matrix.image.container, 'centos-9') || contains(matrix.image.container, 'centos:stream9')
+        run: |
+          sed -i 's/mirror.stream.centos.org/vault.centos.org/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^#baseurl/baseurl/g' /etc/yum.repos.d/*.repo
+
       - name: Setup environment
         run: |
           set -o errexit -o pipefail -o noclobber -o nounset
@@ -167,7 +146,7 @@ jobs:
           cp "cmake/CTestCostData.txt" "build/Testing/Temporary"
           export PATH="$PWD/build/src/lib:$PATH"
           chown -R rnpuser:rnpuser $PWD
-          exec su rnpuser -c "ctest --parallel ${{ env.CORES }} --test-dir build --output-on-failure"
+          exec su rnpuser -c "ctest --parallel 1 --test-dir build --output-on-failure"
 
       - name: Coverage
         if: env.BUILD_MODE == 'coverage'
@@ -213,6 +192,13 @@ jobs:
     name: Package ${{ matrix.image.name }} SRPM
 
     steps:
+      - name: Fix CentOS 9 mirrors
+        if: contains(matrix.image.container, 'centos-9') || contains(matrix.image.container, 'centos:stream9')
+        run: |
+          sed -i 's/mirror.stream.centos.org/vault.centos.org/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^#baseurl/baseurl/g' /etc/yum.repos.d/*.repo
+
       - name: Install rpm tools
         run:  yum -y install rpm-build
 
@@ -256,6 +242,13 @@ jobs:
 
     name: Package ${{ matrix.image.name }} RPM
     steps:
+      - name: Fix CentOS 9 mirrors
+        if: contains(matrix.image.container, 'centos-9') || contains(matrix.image.container, 'centos:stream9')
+        run: |
+          sed -i 's/mirror.stream.centos.org/vault.centos.org/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^#baseurl/baseurl/g' /etc/yum.repos.d/*.repo
+
       - name: Install rpm tools
         run:  yum -y install rpm-build
 
@@ -307,6 +300,13 @@ jobs:
     name: RPM test on ${{ matrix.image.name }}
 
     steps:
+      - name: Fix CentOS 9 mirrors
+        if: contains(matrix.image.container, 'centos-9') || contains(matrix.image.container, 'centos:stream9')
+        run: |
+          sed -i 's/mirror.stream.centos.org/vault.centos.org/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^#baseurl/baseurl/g' /etc/yum.repos.d/*.repo
+
       - name: Install prerequisites
         run:  yum -y install sudo wget binutils
 

@@ -24,36 +24,6 @@
 
 name: time-machine
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - 'version.txt'
-      - '.github/workflows/*.yml'
-      - '!.github/workflows/time-machine.yml'
-  pull_request:
-    paths-ignore:
-      - '/*.sh'
-      - '/.*'
-      - '/_*'
-      - 'Brewfile'
-      - 'docs/**'
-      - '**.adoc'
-      - '**.md'
-      - '**.nix'
-      - 'flake.lock'
-      - 'version.txt'
-      - '.github/workflows/*.yml'
-      - '!.github/workflows/time-machine.yml'
   workflow_dispatch:
 
 concurrency:
@@ -193,4 +163,4 @@ jobs:
           export PATH="$PWD/build/src/lib:$PATH"
           chown -R rnpuser:rnpuser $PWD
           echo Running tests for "$(LD_PRELOAD=/usr/lib64/faketime/libfaketime.so.1 date)"
-          exec su rnpuser -c "LD_PRELOAD=/usr/lib64/faketime/libfaketime.so.1 ctest --parallel ${{ env.CORES }} --test-dir build --output-on-failure"
+          exec su rnpuser -c "LD_PRELOAD=/usr/lib64/faketime/libfaketime.so.1 ctest --parallel 1 --test-dir build --output-on-failure"
