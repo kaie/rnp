@@ -76,6 +76,13 @@ jobs:
         with:
           submodules: true  
 
+      - name: Fix CentOS 9 mirrors
+        if: contains(matrix.image.container, 'centos-9') || contains(matrix.image.container, 'centos:stream9')
+        run: |
+          sed -i 's/mirror.stream.centos.org/vault.centos.org/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^#baseurl/baseurl/g' /etc/yum.repos.d/*.repo
+
       - name: Setup environment
         run: |
           set -o errexit -o pipefail -o noclobber -o nounset
@@ -185,6 +192,13 @@ jobs:
     name: Package ${{ matrix.image.name }} SRPM
 
     steps:
+      - name: Fix CentOS 9 mirrors
+        if: contains(matrix.image.container, 'centos-9') || contains(matrix.image.container, 'centos:stream9')
+        run: |
+          sed -i 's/mirror.stream.centos.org/vault.centos.org/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^#baseurl/baseurl/g' /etc/yum.repos.d/*.repo
+
       - name: Install rpm tools
         run:  yum -y install rpm-build
 
@@ -228,6 +242,13 @@ jobs:
 
     name: Package ${{ matrix.image.name }} RPM
     steps:
+      - name: Fix CentOS 9 mirrors
+        if: contains(matrix.image.container, 'centos-9') || contains(matrix.image.container, 'centos:stream9')
+        run: |
+          sed -i 's/mirror.stream.centos.org/vault.centos.org/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^#baseurl/baseurl/g' /etc/yum.repos.d/*.repo
+
       - name: Install rpm tools
         run:  yum -y install rpm-build
 
@@ -279,6 +300,13 @@ jobs:
     name: RPM test on ${{ matrix.image.name }}
 
     steps:
+      - name: Fix CentOS 9 mirrors
+        if: contains(matrix.image.container, 'centos-9') || contains(matrix.image.container, 'centos:stream9')
+        run: |
+          sed -i 's/mirror.stream.centos.org/vault.centos.org/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/*.repo
+          sed -i 's/^#baseurl/baseurl/g' /etc/yum.repos.d/*.repo
+
       - name: Install prerequisites
         run:  yum -y install sudo wget binutils
 
