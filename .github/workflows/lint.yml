@@ -15,6 +15,7 @@ on:
       - '**.md'
       - '**.nix'
       - 'flake.lock'
+  workflow_dispatch:
 
 jobs:
   clang-format:
